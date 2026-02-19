@@ -1,5 +1,5 @@
 import express from  'express'
-import router from './routes'
+import router from './router'
 import db from './config/db'
 import colors from 'colors'
 
