@@ -42,7 +42,7 @@ export const getProductById = async (req, res: Response) => {
 export const createProduct = async (req: Request, res: Response) => {
     try {
         const product = await Product.create(req.body)
-        res.json({data: product})
+        res.status(201).json({data: product})
     } catch (error) {
         console.log(error)
     }
@@ -55,7 +55,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     if(!product) {
         return res.status(404).json({
-            error: 'Producto no encontrado'
+            error: 'Producto No Encontrado'
         })
     }
 
@@ -95,5 +95,5 @@ export const deleteProduct = async (req: Request, res: Response) => {
     }
 
     await product.destroy()
-    res.json({data: 'Producto eliminado'})
+    res.json({data: 'Producto Eliminado'})
 }
