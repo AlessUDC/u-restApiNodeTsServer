@@ -126,7 +126,7 @@ describe('PUT /api/products:id' , () => {
         expect(response.body.errors[0].msg).toBe('ID no válido')
     })
 
-    test('should display validation error messages when updating a product', async() => {
+    test('should display validation error messages when updating a product', async () => {
         const response = await request(server).put('/api/products/1').send({})
 
         expect(response.status).toBe(400)
@@ -138,7 +138,7 @@ describe('PUT /api/products:id' , () => {
         expect(response.body).not.toHaveProperty('data')
     })
 
-    test('should validate that the price is greater than 0', async() => {
+    test('should validate that the price is greater than 0', async () => {
         const response = await request(server)
             .put('/api/products/1')
             .send({                
@@ -157,7 +157,7 @@ describe('PUT /api/products:id' , () => {
         expect(response.body).not.toHaveProperty('data')
     })
 
-    test('should return a 404 response for a non-existent product', async() => {
+    test('should return a 404 response for a non-existent product', async () => {
         const productId = 9999
         const response = await request(server)
             .put(`/api/products/${productId}`)
@@ -174,7 +174,7 @@ describe('PUT /api/products:id' , () => {
         expect(response.body).not.toHaveProperty('data')
     })
 
-    test('should update an existing product with valid data', async() => {
+    test('should update an existing product with valid data', async () => {
         const response = await request(server)
             .put(`/api/products/1`)
             .send({                
@@ -191,15 +191,37 @@ describe('PUT /api/products:id' , () => {
     })
 })
 
+describe('PATCH /api/products/:id' , () => {
+    test('should return a 404 response for a non-existing product', async () => {
+        const productId = 9999
+        const response = await request(server).patch(`/api/products/${productId}`)
+        expect(response.status).toBe(404)
+        expect(response.body.error).toBe('Producto no encontrado')
+        expect(response.status).not.toBe(200)
+        expect(response.body.error).not.toHaveProperty('data')
+    })
+
+    test('should update the product availability', async () => {
+        const response = await request(server).patch('/api/products/1')
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveProperty('data')
+        expect(response.body.data.availability).toBe(false)
+        
+        expect(response.status).not.toBe(404)
+        expect(response.status).not.toBe(400)
+        expect(response.body).not.toHaveProperty('error')
+    })
+})
+
 describe('DELETE /api/products/:id' , () => {
-    test('should check a valid ID', async() => {
+    test('should check a valid ID', async () => {
         const response = await request(server).delete('/api/products/not-valid-id')
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('errors')
         expect(response.body.errors[0].msg).toBe('ID no válido')
     })
 
-    test('should return a 404 response for a non-existent product', async() => {
+    test('should return a 404 response for a non-existent product', async () => {
         const productId = 9999
         const response = await request(server).delete(`/api/products/${productId}`)
         expect(response.status).toBe(404)
@@ -207,7 +229,7 @@ describe('DELETE /api/products/:id' , () => {
         expect(response.status).not.toBe(200)
     })
 
-    test('should delete a product', async () => {
+    test('should delete a product', async  () => {
         const response = await request(server).delete('/api/products/1')
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty('data')
